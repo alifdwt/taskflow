@@ -7,9 +7,12 @@ import * as schema from "./db/schema";
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    // Simple schema mapping - UUID makes everything compatible
     schema: {
       user: schema.users,
       session: schema.sessions,
+      account: schema.accounts,
+      verification: schema.verifications,
     },
   }),
   emailAndPassword: {
@@ -17,11 +20,19 @@ export const auth = betterAuth({
     requireEmailVerification: false, // Set to true in production
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // 1 day
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    },
   },
   secret: process.env.AUTH_SECRET!,
   baseURL: process.env.AUTH_URL!,
+  advanced: {
+    database: {
+      generateId: () => crypto.randomUUID(),
+    },
+    cookiePrefix: "taskflow",
+  },
   trustedOrigins: [process.env.AUTH_URL!],
 });
 
