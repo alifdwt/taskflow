@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -15,32 +14,33 @@ const client = postgres(process.env.DATABASE_URL!, {
 const db = drizzle(client, { schema });
 
 async function seed() {
-  console.log("🌱 Starting database seeding...");
+  console.log("🌱 Starting database seeding with UUID support...");
 
   try {
-    // Create test users
+    // Create test users - UUIDs generated automatically
     console.log("Creating test users...");
-    const hashedPassword = await bcrypt.hash("Test123!", 10);
 
     const [testUser1, testUser2] = await db
       .insert(users)
       .values([
         {
-          email: "test@example.com",
-          name: "Test User",
-          passwordHash: hashedPassword,
+          email: "demo@taskflow.com",
+          name: "Demo User",
+          passwordHash: "", // Better Auth handles this
           emailVerified: true,
         },
         {
           email: "qa@taskflow.com",
           name: "QA Engineer",
-          passwordHash: hashedPassword,
+          passwordHash: "", // Better Auth handles this
           emailVerified: true,
         },
       ])
       .returning();
 
-    console.log("✅ Test users created");
+    console.log("✅ Test users created with UUIDs:");
+    console.log(`   - ${testUser1.name}: ${testUser1.id}`);
+    console.log(`   - ${testUser2.name}: ${testUser2.id}`);
 
     // Create sample projects
     console.log("Creating sample projects...");
@@ -62,67 +62,77 @@ async function seed() {
       ])
       .returning();
 
-    console.log("✅ Sample projects created");
+    console.log("✅ Sample projects created with UUIDs:");
+    console.log(`   - ${project1.name}: ${project1.id}`);
+    console.log(`   - ${project2.name}: ${project2.id}`);
 
     // Create sample tasks
     console.log("Creating sample tasks...");
-    await db.insert(tasks).values([
-      {
-        title: "Setup Authentication System",
-        description: "Implement user registration and login functionality",
-        status: "done",
-        priority: "high",
-        projectId: project1.id,
-        userId: testUser1.id,
-        completed: true,
-        completedAt: new Date(),
-      },
-      {
-        title: "Create Task Management Interface",
-        description: "Build the main task management UI with CRUD operations",
-        status: "in_progress",
-        priority: "high",
-        projectId: project1.id,
-        userId: testUser1.id,
-        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      },
-      {
-        title: "Write Cypress E2E Tests",
-        description:
-          "Create comprehensive end-to-end tests for all user journeys",
-        status: "todo",
-        priority: "medium",
-        projectId: project2.id,
-        userId: testUser1.id,
-        dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
-      },
-      {
-        title: "Setup CI/CD Pipeline",
-        description:
-          "Configure GitHub Actions for automated testing and deployment",
-        status: "todo",
-        priority: "medium",
-        projectId: project1.id,
-        userId: testUser1.id,
-      },
-      {
-        title: "API Testing with Postman",
-        description: "Create and execute API test collection",
-        status: "todo",
-        priority: "low",
-        projectId: project2.id,
-        userId: testUser1.id,
-      },
-    ]);
+    const newTasks = await db
+      .insert(tasks)
+      .values([
+        {
+          title: "Setup Authentication System",
+          description:
+            "Implement user registration and login functionality using Better Auth",
+          status: "done",
+          priority: "high",
+          projectId: project1.id,
+          userId: testUser1.id,
+          completed: true,
+          completedAt: new Date(),
+        },
+        {
+          title: "Create Task Management Interface",
+          description: "Build the main task management UI with CRUD operations",
+          status: "in_progress",
+          priority: "high",
+          projectId: project1.id,
+          userId: testUser1.id,
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+        {
+          title: "Write Cypress E2E Tests",
+          description:
+            "Create comprehensive end-to-end tests for all user journeys",
+          status: "todo",
+          priority: "medium",
+          projectId: project2.id,
+          userId: testUser1.id,
+          dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        },
+        {
+          title: "Setup CI/CD Pipeline",
+          description:
+            "Configure GitHub Actions for automated testing and deployment",
+          status: "todo",
+          priority: "medium",
+          projectId: project1.id,
+          userId: testUser1.id,
+        },
+        {
+          title: "API Testing with Postman",
+          description: "Create and execute API test collection",
+          status: "todo",
+          priority: "low",
+          projectId: project2.id,
+          userId: testUser1.id,
+        },
+      ])
+      .returning();
 
-    console.log("✅ Sample tasks created");
+    console.log(`✅ ${newTasks.length} sample tasks created with UUIDs`);
     console.log("🎉 Database seeding completed successfully!");
 
-    console.log("\n📝 Test Credentials:");
-    console.log("Email: test@example.com");
-    console.log("Password: Test123!");
-    console.log("\nEmail: qa@taskflow.com");
-    console.log("Password: Test123!");
+    console.log("\n🔑 Authentication Testing:");
+    console.log("1. Visit: http://localhost:4000/signup");
+    console.log("2. Create account with any email/password");
+    console.log("3. Better Auth will handle all authentication records");
+    console.log("\n💡 Demo accounts available for signup:");
+    console.log("   - demo@taskflow.com");
+    console.log("   - qa@taskflow.com");
+    console.log("   - Use any password (8+ characters)");
+    console.log("\n🎯 All tables now use UUIDs - Better Auth compatible!");
   } catch (error) {
     console.error("❌ Seeding failed:", error);
     process.exit(1);

@@ -1,41 +1,62 @@
+CREATE TABLE "accounts" (
+	"id" varchar(255) PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
+	"account_id" varchar(255) NOT NULL,
+	"provider_id" varchar(255) NOT NULL,
+	"access_token" text,
+	"refresh_token" text,
+	"id_token" text,
+	"access_token_expires_at" timestamp,
+	"refresh_token_expires_at" timestamp,
+	"scope" text,
+	"password" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "files" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"filename" varchar(255) NOT NULL,
 	"original_name" varchar(255) NOT NULL,
 	"file_path" varchar(500) NOT NULL,
 	"file_size" integer,
 	"mime_type" varchar(100),
-	"task_id" integer,
-	"uploaded_by" integer NOT NULL,
+	"task_id" uuid,
+	"uploaded_by" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "projects" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"description" text,
 	"color" varchar(7) DEFAULT '#3b82f6',
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
-	"id" varchar(255) PRIMARY KEY NOT NULL,
-	"user_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"token" text NOT NULL,
+	"ip_address" text,
+	"user_agent" text,
 	"expires_at" timestamp NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "sessions_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
 CREATE TABLE "tasks" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" text,
 	"status" varchar(20) DEFAULT 'todo' NOT NULL,
 	"priority" varchar(10) DEFAULT 'medium' NOT NULL,
 	"due_date" timestamp,
-	"project_id" integer,
-	"user_id" integer NOT NULL,
+	"project_id" uuid,
+	"user_id" uuid NOT NULL,
 	"completed" boolean DEFAULT false,
 	"completed_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -43,10 +64,10 @@ CREATE TABLE "tasks" (
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"name" varchar(255) NOT NULL,
-	"password_hash" varchar(255) NOT NULL,
+	"password_hash" varchar(255),
 	"avatar_url" varchar(500),
 	"email_verified" boolean DEFAULT false,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -54,6 +75,16 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
+CREATE TABLE "verifications" (
+	"id" varchar(255) PRIMARY KEY NOT NULL,
+	"identifier" varchar(255) NOT NULL,
+	"value" text NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "files" ADD CONSTRAINT "files_task_id_tasks_id_fk" FOREIGN KEY ("task_id") REFERENCES "public"."tasks"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "files" ADD CONSTRAINT "files_uploaded_by_users_id_fk" FOREIGN KEY ("uploaded_by") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "projects" ADD CONSTRAINT "projects_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
