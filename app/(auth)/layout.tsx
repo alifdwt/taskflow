@@ -113,9 +113,7 @@ export default function AuthLayout({
               </div>
               <div>
                 <p className="font-medium">QA Engineering Team</p>
-                <p className="text-sm text-blue-200">
-                  PT Bionic Teknologi Indonesia
-                </p>
+                <p className="text-sm text-blue-200">PT Jaya Abadi Motor</p>
               </div>
             </div>
           </div>

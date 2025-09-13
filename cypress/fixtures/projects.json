@@ -1,0 +1,12 @@
+{
+  "testProject": {
+    "name": "Test Project",
+    "description": "Project for testing purposes",
+    "color": "#3b82f6"
+  },
+  "qaProject": {
+    "name": "QA Testing",
+    "description": "Quality assurance project",
+    "color": "#10b981"
+  }
+}

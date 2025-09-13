@@ -29,6 +29,7 @@ export default function SignUpPage() {
           <Link
             href="/signin"
             className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+            data-cy="signin-link"
           >
             Sign in
           </Link>

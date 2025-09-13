@@ -3,13 +3,12 @@ import { z } from "zod";
 // Sign In Schema
 export const signInSchema = z.object({
   email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
+    .email("Please enter a valid email address")
+    .min(1, "Email is required"),
   password: z
     .string()
     .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .min(8, "Password must be at least 8 characters"),
 });
 
 // Sign Up Schema
@@ -26,7 +25,6 @@ export const signUpSchema = z
       .email("Please enter a valid email address"),
     password: z
       .string()
-      .min(1, "Password is required")
       .min(8, "Password must be at least 8 characters")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,

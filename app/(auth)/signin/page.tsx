@@ -28,6 +28,7 @@ export default function SignInPage() {
           <Link
             href="/forgot-password"
             className="text-blue-600 hover:text-blue-800 hover:underline"
+            data-cy="forgot-password-link"
           >
             Forgot your password?
           </Link>
@@ -38,6 +39,7 @@ export default function SignInPage() {
           <Link
             href="/signup"
             className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+            data-cy="signup-link"
           >
             Sign up
           </Link>

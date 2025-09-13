@@ -1,0 +1,21 @@
+{
+  "sampleTask": {
+    "title": "Sample Task",
+    "description": "This is a sample task for testing",
+    "priority": "medium",
+    "status": "todo",
+    "dueDate": "2025-10-01"
+  },
+  "urgentTask": {
+    "title": "Urgent Bug Fix",
+    "description": "Critical bug that needs immediate attention",
+    "priority": "high",
+    "status": "in_progress"
+  },
+  "completedTask": {
+    "title": "Completed Feature",
+    "description": "This feature has been completed",
+    "priority": "low",
+    "status": "done"
+  }
+}
