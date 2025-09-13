@@ -84,7 +84,10 @@ export function SignInForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Error Message */}
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+            <div
+              className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+              data-cy="error-message"
+            >
               {error}
             </div>
           )}
@@ -96,13 +99,16 @@ export function SignInForm() {
               id="email"
               type="email"
               placeholder="Enter your email"
+              data-cy="email-input"
               {...register("email")}
               className={
                 errors.email ? "border-red-300 focus:border-red-500" : ""
               }
             />
             {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
+              <p className="text-sm text-red-600" data-cy="email-error">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -114,6 +120,7 @@ export function SignInForm() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                data-cy="password-input"
                 {...register("password")}
                 className={
                   errors.password
@@ -125,6 +132,7 @@ export function SignInForm() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-400 hover:text-gray-600"
+                data-cy="password-toggle"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -134,15 +142,25 @@ export function SignInForm() {
               </button>
             </div>
             {errors.password && (
-              <p className="text-sm text-red-600">{errors.password.message}</p>
+              <p className="text-sm text-red-600" data-cy="password-error">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            data-cy="signin-button"
+          >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2
+                  className="mr-2 h-4 w-4 animate-spin"
+                  data-cy="loading-spinner"
+                />
                 Signing in...
               </>
             ) : (

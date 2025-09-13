@@ -1,0 +1,21 @@
+{
+  "validUser": {
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "Test123!"
+  },
+  "invalidUser": {
+    "email": "invalid-email",
+    "password": "123"
+  },
+  "demoUser": {
+    "name": "Demo User",
+    "email": "demo@taskflow.com",
+    "password": "Demo123!"
+  },
+  "qaUser": {
+    "name": "QA Engineer",
+    "email": "qa@taskflow.com",
+    "password": "QA123!"
+  }
+}

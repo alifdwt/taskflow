@@ -84,7 +84,7 @@ export function SignUpForm() {
     return (
       <Card className="border-0 shadow-lg">
         <CardContent className="pt-6">
-          <div className="space-y-4 text-center">
+          <div className="space-y-4 text-center" data-cy="success-message">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Check className="h-6 w-6 text-green-600" />
             </div>
@@ -127,7 +127,10 @@ export function SignUpForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Error Message */}
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+            <div
+              className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+              data-cy="error-message"
+            >
               {error}
             </div>
           )}
@@ -139,13 +142,16 @@ export function SignUpForm() {
               id="name"
               type="text"
               placeholder="Enter your full name"
+              data-cy="name-input"
               {...register("name")}
               className={
                 errors.name ? "border-red-300 focus:border-red-500" : ""
               }
             />
             {errors.name && (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
+              <p className="text-sm text-red-600" data-cy="name-error">
+                {errors.name.message}
+              </p>
             )}
           </div>
 
@@ -154,15 +160,18 @@ export function SignUpForm() {
             <Label htmlFor="email">Email address</Label>
             <Input
               id="email"
-              type="email"
+              // type="email"
               placeholder="Enter your email"
+              data-cy="email-input"
               {...register("email")}
               className={
                 errors.email ? "border-red-300 focus:border-red-500" : ""
               }
             />
             {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
+              <p className="text-sm text-red-600" data-cy="email-error">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
@@ -174,6 +183,7 @@ export function SignUpForm() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Create a password"
+                data-cy="password-input"
                 {...register("password")}
                 className={
                   errors.password
@@ -185,6 +195,7 @@ export function SignUpForm() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-400 hover:text-gray-600"
+                data-cy="password-toggle"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -196,7 +207,7 @@ export function SignUpForm() {
 
             {/* Password Strength Indicator */}
             {password && (
-              <div className="space-y-2">
+              <div className="space-y-2" data-cy="password-strength">
                 <div className="flex space-x-1">
                   {[1, 2, 3, 4, 5].map((level) => (
                     <div
@@ -235,7 +246,9 @@ export function SignUpForm() {
             )}
 
             {errors.password && (
-              <p className="text-sm text-red-600">{errors.password.message}</p>
+              <p className="text-sm text-red-600" data-cy="password-error">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -247,6 +260,7 @@ export function SignUpForm() {
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm your password"
+                data-cy="confirm-password-input"
                 {...register("confirmPassword")}
                 className={
                   errors.confirmPassword
@@ -258,6 +272,7 @@ export function SignUpForm() {
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-400 hover:text-gray-600"
+                data-cy="confirm-password-toggle"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -267,17 +282,28 @@ export function SignUpForm() {
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-sm text-red-600">
+              <p
+                className="text-sm text-red-600"
+                data-cy="confirm-password-error"
+              >
                 {errors.confirmPassword.message}
               </p>
             )}
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            data-cy="signup-button"
+          >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2
+                  className="mr-2 h-4 w-4 animate-spin"
+                  data-cy="loading-spinner"
+                />
                 Creating account...
               </>
             ) : (
